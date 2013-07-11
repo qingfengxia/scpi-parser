@@ -54,10 +54,34 @@ Source codes are devided into few files to provide better portability to other s
 - *libscpi/fifo.c* - provides basic implementation of error queue FIFO
 - *libscpi/debug.c* - provides debug functions
 
-- *examples/test-parser* - is the basic non-interactive demo of the parser
-- *examples/test-interactive* - is the basic interactive demo of the parser
-- *examples/test-tcp* - is the basic interactive tcp server (port 5025)
-- *examples/common* - common examples commands
+Several test cases are listed in "example" folder
+
+ examples/common - common to examples 
+ - *examples/common/scpi-def.h* - 
+ declear 
+       scpi_interface {SCPI_Write() ... }, 
+ whose implementation are within each example's main.cpp
+ 
+ - *examples/common/scpi-def.c* - 
+       to instantiate (allocate memory) for scpi_context 
+       to fill structure of SCPI command definitions scpi_command_t scpi_commands[], 
+       to implement example callback functions, such as: 
+       ```c
+            scpi_result_t DMM_MeasureVoltageDcQ(scpi_t * context)
+        ```
+  - *examples/common/scpi-def.cpp* -   C++ version of "scpi-def.c"
+
+Example cases:
+
+ - *examples/test-LwIP-netconn   FreeRTOS +lwIP server
+ - *examples/test-parser* - is the basic non-interactive demo of the parser
+ - *examples/test-interactive* - is the basic interactive demo of the parser
+ - *examples/test-tcp* - is the basic interactive tcp server (port 5025), POSIX OS only
+
+How to compile examples:
+ 
+In order to compile the example cases, change directory to "libscpi" and type command: "make",
+before "make" in specific example directory. "examples/test-parser" should be portable to MS windows via MingGW, but a project (tell compiler how to compile) need to be created for your visual studio IDE. 
 
 
 Implementation to your instrument
