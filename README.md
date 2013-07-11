@@ -66,14 +66,14 @@ Several test cases are listed in "example" folder
        to instantiate (allocate memory) for scpi_context 
        to fill structure of SCPI command definitions scpi_command_t scpi_commands[], 
        to implement example callback functions, such as: 
-       ```c
+        ```c
             scpi_result_t DMM_MeasureVoltageDcQ(scpi_t * context)
         ```
-  - *examples/common/scpi-def.cpp* -   C++ version of "scpi-def.c"
+ - *examples/common/scpi-def.cpp* -   C++ version of "scpi-def.c"
 
 Example cases:
 
- - *examples/test-LwIP-netconn   FreeRTOS +lwIP server
+ - *examples/test-LwIP-* -   FreeRTOS +lwIP server
  - *examples/test-parser* - is the basic non-interactive demo of the parser
  - *examples/test-interactive* - is the basic interactive demo of the parser
  - *examples/test-tcp* - is the basic interactive tcp server (port 5025), POSIX OS only
