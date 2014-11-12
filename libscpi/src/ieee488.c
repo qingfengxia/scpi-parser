@@ -98,13 +98,16 @@ static size_t writeControl(scpi_t * context, scpi_ctrl_name_t ctrl, scpi_reg_val
  * @param val - new value
  */
 void SCPI_RegSet(scpi_t * context, scpi_reg_name_t name, scpi_reg_val_t val) {
-    bool_t srq = FALSE;
+    scpi_bool_t srq = FALSE;
     scpi_reg_val_t mask;
+    scpi_reg_val_t old_val;
 
     if ((name >= SCPI_REG_COUNT) || (context->registers == NULL)) {
         return;
     }
     
+    /* store old register value */
+    old_val = context->registers[name];
 
     /* set register value */
     context->registers[name] = val;
@@ -116,7 +119,10 @@ void SCPI_RegSet(scpi_t * context, scpi_reg_name_t name, scpi_reg_val_t val) {
             mask &= ~STB_SRQ;
             if (val & mask) {
                 val |= STB_SRQ;
-                srq = TRUE;
+                /* avoid sending SRQ if nothing has changed */
+                if (old_val != val) {
+                    srq = TRUE;
+                }
             } else {
                 val &= ~STB_SRQ;
             }
@@ -234,13 +240,20 @@ scpi_result_t SCPI_CoreEsrQ(scpi_t * context) {
 
 /**
  * *IDN?
+ * 
+ * field1: MANUFACTURE
+ * field2: MODEL
+ * field4: SUBSYSTEMS REVISIONS
+ * 
+ * example: MANUFACTURE,MODEL,0,01-02-01
  * @param context
  * @return 
  */
 scpi_result_t SCPI_CoreIdnQ(scpi_t * context) {
-    SCPI_ResultString(context, SCPI_MANUFACTURE);
-    SCPI_ResultString(context, SCPI_DEV_NAME);
-    SCPI_ResultString(context, SCPI_DEV_VERSION);
+    SCPI_ResultString(context, context->idn[0]);
+    SCPI_ResultString(context, context->idn[1]);
+    SCPI_ResultString(context, context->idn[2]);
+    SCPI_ResultString(context, context->idn[3]);
     return SCPI_RES_OK;
 }
 
